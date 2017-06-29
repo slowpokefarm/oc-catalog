@@ -135,11 +135,6 @@ class Product extends Model
         });
     }
 
-    public function getPivotValueOptions()
-    {
-        return [1 => 1];
-    }
-
     /**
      * Lists products for the front end
      * @param  array $options Display options

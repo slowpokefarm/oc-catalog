@@ -13,9 +13,4 @@ class PropertyPivot extends Pivot
     {
         return $this->parent->values_array;
     }
-
-    public function beforeSave()
-    {
-        tracelog(post());
-    }
 }

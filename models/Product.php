@@ -74,7 +74,7 @@ class Product extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['title', 'slug', 'description', 'items_available', 'price', 'discount_price, sku'];
+    protected $fillable = ['title', 'slug', 'description', 'items_available', 'price', 'discount_price', 'sku'];
 
     /**
      * @var array Relations
@@ -103,6 +103,14 @@ class Product extends Model
             'table' => 'tiipiik_catalog_products_stores',
             'order' => 'name',
         ],
+        'properties' => [
+            '\Tiipiik\Catalog\Models\Property',
+            'pivotModel' => '\TiipiiK\Catalog\Classes\PropertyPivot',
+            'table' => 'tiipiik_catalog_prods_props',
+            'scope' => 'isUsed',
+            'order' => 'name',
+            'pivot' => ['value'],
+        ],
     ];
 
     /**
@@ -125,6 +133,11 @@ class Product extends Model
             $model->implement[] = 'RainLab.Translate.Behaviors.TranslatableModel';
 
         });
+    }
+
+    public function getPivotValueOptions()
+    {
+        return [1 => 1];
     }
 
     /**
@@ -255,6 +268,7 @@ class Product extends Model
     public function filterFields($fields, $context = null)
     {
         $fields->stores->hidden = (Settings::get('activate_stores') == 1) ? false : true;
+        $fields->properties->hidden = (Settings::get('activate_properties') == 1) ? false : true;
     }
 
     /*
@@ -306,6 +320,9 @@ class Product extends Model
             // Delete custom value
             CustomValueModel::find($value->id)->delete();
         });
+
+        // Detach properties
+        $this->properties()->detach();
     }
 
     public function updateCustomFieldsAndValues($context)

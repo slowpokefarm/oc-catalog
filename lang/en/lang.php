@@ -44,6 +44,10 @@ return [
         'meta_title_ph' => 'Define meta title',
         'meta_desc' => 'Meta description',
         'meta_desc_ph' => 'Define meta description',
+        'properties' => 'Properties',
+        'properties_relation' => 'Properties',
+        'properties_cmt' => 'Define individual product properties',
+        'properties_empty' => 'Product has no properties',
     ],
     'categories' => [
         'new_category' => 'New Category',
@@ -102,6 +106,22 @@ return [
         'details' => 'Details',
         'description' => 'Description',
     ],
+    'properties' => [
+        'menu_label' => 'Product properties',
+        'name' => 'Name',
+        'type' => 'Value type',
+        'description' => 'Description',
+        'values_array' => 'Values set',
+        'is_used' => 'Is used',
+        'value' => 'Value',
+        'type_numeric' => 'Numeric',
+        'type_string' => 'String',
+        'type_dropdown' => 'Dropdown',
+        'dropdown_id' => 'Unique ID',
+        'dropdown_value' => 'Value',
+        'new' => 'New Property',
+
+    ],
     'config' => [
         'form' => [
             'name' => 'Product',
@@ -125,6 +145,9 @@ return [
             'store_name' => 'Store',
             'store_create_title' => 'Create Store',
             'store_update_title' => 'Edit Store',
+            'property_name' => 'Property',
+            'property_create_title' => 'Create Property',
+            'property_update_title' => 'Edit Property',
         ],
         'list' => [
             'title' => 'Manage Products',
@@ -134,6 +157,7 @@ return [
             'group_title' => 'Manage Groups',
             'store_title' => 'Manage Stores',
             'brand_title' => 'Manage Brands',
+            'property_title' => 'Manage Properties',
         ],
     ],
     'settings' => [
@@ -153,6 +177,9 @@ return [
         'use_secure_urls_desc' => 'Check to always generate secure urls in the product lists',
         'activate_stores' => 'Activate Stores',
         'activate_stores_desc' => 'Check to activate Stores in the Catalog',
+        'activate_properties' => 'Activate Properties',
+        'activate_properties_desc' => 'Check to activate individual Product Properties',
+        'access_properties' => 'Manage properties',
     ],
     'catalog' => [
         'delete_confirm' => 'Do you really want to delete these items ?',

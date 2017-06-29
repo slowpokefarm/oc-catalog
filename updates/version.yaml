@@ -106,4 +106,10 @@
 1.11.20:
     - Added sku codes for products
     - add_sku_to_products.php
+1.11.21:
+    - Added product properties
+    - create_properties_table.php
+1.11.22:
+    - Fixed sort_order on products table
+    - fix_sort_order_on_products.php
     #- feed_tables.php

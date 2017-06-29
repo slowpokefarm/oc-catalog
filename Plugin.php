@@ -50,6 +50,10 @@ class Plugin extends PluginBase
                 'tab' => 'Catalog',
                 'label' => 'tiipiik.catalog::lang.settings.access_stores',
             ],
+            'tiipiik.catalog.manage_properties' => [
+                'tab' => 'Catalog',
+                'label' => 'tiipiik.catalog::lang.settings.access_properties',
+            ],
             'tiipiik.catalog.manage_brands' => [
                 'tab' => 'Catalog',
                 'label' => 'tiipiik.catalog::lang.settings.access_brands',
@@ -142,6 +146,17 @@ class Plugin extends PluginBase
                 'url' => Backend::url('tiipiik/catalog/stores'),
                 'attributes' => ['data-menu-item' => 'stores'],
                 'permissions' => ['tiipiik.catalog.manage_stores'],
+            ];
+        }
+
+        if (Settings::get('activate_properties') == 1) {
+            $nav['catalog']['sideMenu']['properties'] = [
+                'label' => 'tiipiik.catalog::lang.properties.menu_label',
+                'icon' => 'icon-th-list',
+                'order' => 400,
+                'url' => Backend::url('tiipiik/catalog/properties'),
+                'attributes' => ['data-menu-item' => 'properties'],
+                'permissions' => ['tiipiik.catalog.manage_properties'],
             ];
         }
 

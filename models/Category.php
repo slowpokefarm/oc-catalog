@@ -1,8 +1,9 @@
-<?php namespace Tiipiik\Catalog\Models;
+<?php
+namespace Tiipiik\Catalog\Models;
 
-use Model;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
+use Model;
 
 /**
  * Category Model
@@ -21,33 +22,33 @@ class Category extends Model
      * Validation rules
      */
     public $rules = [
-        'name' => 'required|unique:tiipiik_catalog_categories',
-        'slug' => 'required',
+        'name' => 'required',
+        'slug' => 'required|unique:tiipiik_catalog_categories',
     ];
 
     /**
      * @var array Translatable fields
      */
     public $translatable = ['name', 'description'];
-    
+
     /**
      * @var array Guarded fields
      */
     protected $guarded = ['*'];
-    
+
     public $belongsToMany = [
         'products' => [
             'Tiipiik\Catalog\Models\Product',
             'table' => 'tiipiik_catalog_prods_cats',
-            'order' => 'title'
+            'order' => 'title',
         ],
     ];
 
     public $attachOne = [
-        'cover' => ['System\Models\File', 'delete' => true]
+        'cover' => ['System\Models\File', 'delete' => true],
     ];
-    
-     /**
+
+    /**
      * Add translation support to this model, if available.
      * @return void
      */
@@ -67,7 +68,7 @@ class Category extends Model
             $model->implement[] = 'RainLab.Translate.Behaviors.TranslatableModel';
         });
     }
-    
+
     /*
      *
      */
@@ -75,7 +76,7 @@ class Category extends Model
     {
         return $this->orderBy('name')->lists('name', 'id');
     }
-    
+
     /*
      * Return the number of product for given category
      */
@@ -95,13 +96,13 @@ class Category extends Model
 
         return $this->url = $controller->pageUrl($pageName, $params);
     }
-    
+
     public static function categoryDetails($param)
     {
         if (!$category = self::whereSlug($param['category'])->first()) {
             return null;
         }
-        
+
         return $category;
     }
 
@@ -135,8 +136,8 @@ class Category extends Model
 
         if ($type == 'catalog-category') {
             $result = [
-                'references'   => self::listSubCategoryOptions(),
-                'dynamicItems' => true
+                'references' => self::listSubCategoryOptions(),
+                'dynamicItems' => true,
             ];
         }
 
@@ -181,7 +182,7 @@ class Category extends Model
                 } else {
                     $result[$category->id] = [
                         'title' => $category->name,
-                        'items' => $iterator($category->children)
+                        'items' => $iterator($category->children),
                     ];
                 }
             }
@@ -262,14 +263,14 @@ class Category extends Model
             }
         } elseif ($item->type == 'all-catalog-categories') {
             $result = [
-                'items' => []
+                'items' => [],
             ];
 
             $categories = self::orderBy('name')->get();
             foreach ($categories as $category) {
                 $categoryItem = [
                     'title' => $category->name,
-                    'url'   => self::getCategoryPageUrl($item->cmsPage, $category, $theme),
+                    'url' => self::getCategoryPageUrl($item->cmsPage, $category, $theme),
                     'mtime' => $category->updated_at,
                 ];
 

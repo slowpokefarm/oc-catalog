@@ -1,8 +1,9 @@
-<?php namespace Tiipiik\Catalog\Updates;
+<?php
+namespace Tiipiik\Catalog\Updates;
 
+use October\Rain\Database\Updates\Migration;
 use Schema;
 use Tiipiik\Catalog\Models\Product;
-use October\Rain\Database\Updates\Migration;
 
 class AddSortOrderToProducts extends Migration
 {
@@ -10,7 +11,7 @@ class AddSortOrderToProducts extends Migration
     public function up()
     {
         Schema::table('tiipiik_catalog_products', function ($table) {
-            $table->boolean('sort_order')->after('discount_price')->default(0);
+            $table->integer('sort_order')->after('discount_price')->unsigned()->default(0);
         });
         // Create default order to make sortable wroks
         $products = Product::all();

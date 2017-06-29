@@ -1,5 +1,4 @@
 <?php
-
 return [
     'plugin_name' => 'Каталог',
     'plugin_description' => 'Обеспечивает функционал каталога',
@@ -45,6 +44,10 @@ return [
         'meta_title_ph' => 'Укажите meta заголовок',
         'meta_desc' => 'Meta описание',
         'meta_desc_ph' => 'Укажите meta описание',
+        'properties' => 'Свойства',
+        'properties_relation' => 'свойства',
+        'properties_cmt' => 'Укажите индивидуальные свойства товаров',
+        'properties_empty' => 'У товара нет свойств',
     ],
     'categories' =>
     [
@@ -110,6 +113,22 @@ return [
         'details' => 'Сведения',
         'description' => 'Описание',
     ],
+    'properties' =>
+    [
+        'menu_label' => 'Свойства товаров',
+        'name' => 'Название',
+        'type' => 'Тип значения',
+        'description' => 'Описание',
+        'values_array' => 'Набор значений',
+        'is_used' => 'Используется',
+        'value' => 'Значение',
+        'type_numeric' => 'Число',
+        'type_string' => 'Строка',
+        'type_dropdown' => 'Значение из списка',
+        'dropdown_id' => 'Уникальный ID',
+        'dropdown_value' => 'Значение',
+        'new' => 'Новое свойство',
+    ],
     'config' =>
     [
         'form' =>
@@ -135,6 +154,9 @@ return [
             'store_name' => 'Магазин',
             'store_create_title' => 'Создать магазин',
             'store_update_title' => 'Редактировать магазин',
+            'property_name' => 'Свойство',
+            'property_create_title' => 'Создать свойство',
+            'property_update_title' => 'Изменить свойство',
         ],
         'list' =>
         [
@@ -145,6 +167,7 @@ return [
             'group_title' => 'Управление группами',
             'store_title' => 'Управление магазинами',
             'brand_title' => 'Управление брендами',
+            'property_title' => 'Управление свойствами',
         ],
     ],
     'settings' =>
@@ -164,7 +187,10 @@ return [
         'use_secure_urls' => 'Использовать безопасные ссылки',
         'use_secure_urls_desc' => 'Включите для активации генерации безопасных ссылок',
         'activate_stores' => 'Активировать магазины',
-        'activate_stores_desc' => 'Включите для активации магазинов (точек продаж) в каталогах',
+        'activate_stores_desc' => 'Включите для активации магазинов (точек продаж] в каталогах',
+        'activate_properties' => 'Активировать свойства',
+        'activate_properties_desc' => 'Включите для активации Свойств товаров',
+        'access_properties' => 'Управление свойствами',
     ],
     'catalog' =>
     [

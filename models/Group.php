@@ -1,4 +1,5 @@
-<?php namespace Tiipiik\Catalog\Models;
+<?php
+namespace Tiipiik\Catalog\Models;
 
 use Model;
 
@@ -14,7 +15,7 @@ class Group extends Model
     public $table = 'tiipiik_catalog_groups';
 
     public $translatable = ['name'];
-    
+
     public $rules = [
         'name' => 'required|unique:tiipiik_catalog_groups',
     ];
@@ -27,23 +28,22 @@ class Group extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [];
+    protected $fillable = ['name'];
 
-    
     public $belongsToMany = [
         'products' => [
             'Tiipiik\Catalog\Models\Product',
             'table' => 'tiipiik_catalog_group_product',
-            'order' => 'name'
+            'order' => 'name',
         ],
         'custom_fields' => [
             'Tiipiik\Catalog\Models\CustomField',
             'table' => 'tiipiik_catalog_group_field',
-            'order' => 'name'
+            'order' => 'name',
         ],
     ];
-    
-     /**
+
+    /**
      * Add translation support to this model, if available.
      * @return void
      */

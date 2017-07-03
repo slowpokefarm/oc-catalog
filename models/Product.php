@@ -12,6 +12,7 @@ class Product extends Model
 {
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\Sortable;
+    use \Tiipiik\Catalog\Traits\Searchable;
 
     private static $product_group;
     private static $brand;
@@ -22,6 +23,12 @@ class Product extends Model
      */
     public $table = 'tiipiik_catalog_products';
 
+    protected $searchable = [
+        'columns' => [
+            'title' => 10,
+            'description' => 1,
+        ],
+    ];
     /**
      * Validation rules
      */
@@ -47,7 +54,7 @@ class Product extends Model
      * The attributes on which the post list can be ordered
      * @var array
      */
-    public static $allowedSortingOptions = array(
+    public static $allowedSortingOptions = [
         'title asc' => 'Title (ascending)',
         'title desc' => 'Title (descending)',
         'created_at asc' => 'Created (ascending)',
@@ -59,7 +66,7 @@ class Product extends Model
         'random' => 'Random',
         'sort_order asc' => 'Reordered (ascending)',
         'sort_order desc' => 'Reordered (descending)',
-    );
+    ];
 
     /**
      * @var array Translatable fields
@@ -155,31 +162,35 @@ class Product extends Model
             'stores' => null,
         ], $options));
 
-        $searchableFields = ['title', 'slug', 'description'];
-
         $obj = $this->newQuery();
         $obj = $obj->whereIsPublished(1);
 
         /*
          * Sorting
          */
+
         if (!is_array($sort)) {
             $sort = [$sort];
         }
 
-        foreach ($sort as $_sort) {
+        if (!$search) {
+            foreach ($sort as $_sort) {
 
-            if (in_array($_sort, array_keys(self::$allowedSortingOptions))) {
-                $parts = explode(' ', $_sort);
-                if (count($parts) < 2) {
-                    array_push($parts, 'desc');
+                if (in_array($_sort, array_keys(self::$allowedSortingOptions))) {
+                    $parts = explode(' ', $_sort);
+                    if (count($parts) < 2) {
+                        array_push($parts, 'desc');
+                    }
+                    list($sortField, $sortDirection) = $parts;
+                    if ($sortField == 'random') {
+                        $sortField = DB::raw('RAND()');
+                    }
+                    $obj->orderBy($sortField, $sortDirection);
                 }
-                list($sortField, $sortDirection) = $parts;
-                if ($sortField == 'random') {
-                    $sortField = DB::raw('RAND()');
-                }
-                $obj->orderBy($sortField, $sortDirection);
             }
+        } else {
+            $obj->orderBy('relevance', 'desc');
+
         }
 
         /*
@@ -216,6 +227,10 @@ class Product extends Model
             $obj = $obj->whereHas('stores', function ($q) use ($stores) {
                 $q->whereIn('id', $stores);
             });
+        }
+
+        if ($search) {
+            $obj->search($search);
         }
 
         return $obj->paginate($perPage, $page);

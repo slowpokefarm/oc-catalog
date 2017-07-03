@@ -90,9 +90,13 @@ class Category extends Model
      * @param string $pageName
      * @param Cms\Classes\Controller $controller
      */
-    public function setUrl($pageName, $controller)
+    public function setUrl($pageName, $controller, array $addParams = null)
     {
         $params = ['slug' => $this->slug];
+
+        if ($addParams && is_array($addParams)) {
+            $params = array_merge($params, $addParams);
+        }
 
         return $this->url = $controller->pageUrl($pageName, $params);
     }

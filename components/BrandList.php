@@ -1,8 +1,9 @@
-<?php namespace Tiipiik\Catalog\Components;
+<?php
+namespace Tiipiik\Catalog\Components;
 
-use Request;
-use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
+use Cms\Classes\Page;
+use Request;
 use Tiipiik\Catalog\Models\Brand;
 
 class BrandList extends ComponentBase
@@ -15,8 +16,8 @@ class BrandList extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'tiipiik.catalog::lang.component.brand_list.name',
-            'description' => 'tiipiik.catalog::lang.component.brand_list.description'
+            'name' => 'tiipiik.catalog::lang.component.brand_list.name',
+            'description' => 'tiipiik.catalog::lang.component.brand_list.description',
         ];
     }
 
@@ -24,56 +25,55 @@ class BrandList extends ComponentBase
     {
         return [
             'brandPage' => [
-                'title'       => 'tiipiik.catalog::lang.component.brand_list.param.brand_page_title',
+                'title' => 'tiipiik.catalog::lang.component.brand_list.param.brand_page_title',
                 'description' => 'tiipiik.catalog::lang.component.brand_list.param.brand_page_desc',
-                'type'        => 'dropdown',
-                'default'     => 'stores/:slug',
+                'type' => 'dropdown',
+                'default' => 'stores/:slug',
             ],
             'brandSlug' => [
-                'title'       => 'tiipiik.catalog::lang.component.brand_list.param.brand_slug_title',
+                'title' => 'tiipiik.catalog::lang.component.brand_list.param.brand_slug_title',
                 'description' => 'tiipiik.catalog::lang.component.brand_list.param.brand_slug_desc',
-                'default'     => '{{ :slug }}',
-                'type'        => 'string',
+                'default' => '{{ :slug }}',
+                'type' => 'string',
             ],
             'noBrandMessage' => [
-                'title'        => 'tiipiik.catalog::lang.component.brand_list.param.no_brand_message_title',
-                'description'  => 'tiipiik.catalog::lang.component.brand_list.param.no_brand_message_desc',
-                'type'         => 'string',
-                'default'      => 'tiipiik.catalog::lang.component.brand_list.param.no_brand_message_default',
+                'title' => 'tiipiik.catalog::lang.component.brand_list.param.no_brand_message_title',
+                'description' => 'tiipiik.catalog::lang.component.brand_list.param.no_brand_message_desc',
+                'type' => 'string',
+                'default' => 'tiipiik.catalog::lang.component.brand_list.param.no_brand_message_default',
             ],
             'brandsPerPage' => [
-                'title'             => 'tiipiik.catalog::lang.component.brand_list.param.brands_per_page_title',
-                'description'       => 'tiipiik.catalog::lang.component.brand_list.param.brands_per_page_desc',
-                'type'              => 'string',
+                'title' => 'tiipiik.catalog::lang.component.brand_list.param.brands_per_page_title',
+                'description' => 'tiipiik.catalog::lang.component.brand_list.param.brands_per_page_desc',
+                'type' => 'string',
                 'validationPattern' => '^[0-9]+$',
                 'validationMessage' => '',
-                'default'           => '9',
-                'group'             => 'Pagination',
+                'default' => '9',
+                'group' => 'Pagination',
             ],
             'pageParam' => [
-                'title'       => 'tiipiik.catalog::lang.component.brand_list.param.page_param_title',
+                'title' => 'tiipiik.catalog::lang.component.brand_list.param.page_param_title',
                 'description' => 'tiipiik.catalog::lang.component.brand_list.param.page_param_desc',
-                'type'        => 'string',
-                'default'     => '{{ :page }}',
-                'group'       => 'Pagination',
+                'type' => 'string',
+                'default' => '{{ :page }}',
+                'group' => 'Pagination',
             ],
         ];
     }
 
     public function getBrandPageOptions()
     {
-        return [''=>'- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+        return ['' => '- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 
     public function onRun()
     {
         // Use strict method only to avoid conflicts whith other plugins
         $this->brandPage = $this->property('brandPage');
-        
+
         $currentPage = post('page');
         $brands = $this->brands = $this->listBrands();
-        $this->brands = $this->listBrands();
-        
+
         /*
          * Pagination
          */
@@ -88,7 +88,7 @@ class BrandList extends ComponentBase
 
             $this->page['paginationUrl'] = $paginationUrl;
         }
-        
+
         $this->noBrandsMessage = $this->page['noBrandsMessage'] = $this->property('noBrandMessage');
         $this->brandSlug = $this->property('brandSlug');
     }
@@ -99,7 +99,11 @@ class BrandList extends ComponentBase
             'page' => $this->property('brandSlug'),
             'perPage' => $this->property('brandsPerPage'),
         ]);
-        
+
+        foreach ($brands as $brand) {
+            $brand->setUrl($this->brandPage, $this->controller);
+        }
+
         return $brands;
     }
 }

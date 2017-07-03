@@ -9,8 +9,4 @@ use October\Rain\Database\Pivot;
 class PropertyPivot extends Pivot
 {
 
-    public function getValueOptions()
-    {
-        return $this->parent->values_array;
-    }
 }

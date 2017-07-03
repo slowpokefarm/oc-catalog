@@ -17,7 +17,10 @@ class FixSortOrderOnProducts extends Migration
     public function down()
     {
         Schema::table('tiipiik_catalog_products', function ($table) {
-            $table->boolean('sort_order')->default(0)->change();
+            $table->dropColumn('sort_order');
+        });
+        Schema::table('tiipiik_catalog_products', function ($table) {
+            $table->boolean('sort_order')->after('discount_price')->default(0);
         });
     }
 }

@@ -32,9 +32,6 @@ class Property extends Model
     /**
      * @var array Relations
      */
-    public $hasOne = [];
-    public $hasMany = [];
-    public $belongsTo = [];
     public $belongsToMany = [
         'products' => [
             '\Tiipiik\Catalog\Models\Product',
@@ -44,12 +41,20 @@ class Property extends Model
             'pivot' => ['value'],
         ],
     ];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
 
+    /**
+     * @param $query
+     * @return mixed \October\Rain\Database\QueryBuilder
+     */
+    public function scopeIsUsed($query)
+    {
+        return $query->where('is_used', true);
+    }
+
+    /**
+     * Type dropdown options
+     * @return array
+     */
     public function getTypeOptions()
     {
         return [
@@ -59,21 +64,46 @@ class Property extends Model
         ];
     }
 
-    public function scopeIsUsed($query)
-    {
-        return $query->where('is_used', true);
-    }
-
+    /**
+     * Returns raw options array for dropdown field in relation controller
+     * @return array
+     */
     public function getPivotValueOptions()
     {
         return $this->values_array;
     }
 
+    /**
+     * Returns the final property value from pivot data using values array if needed
+     * @return mixed
+     */
+    public function getFinalValue()
+    {
+        if ($this->pivot) {
+            switch ($this->type) {
+                case 3:
+                    return isset($this->getPivotValueOptions()[$this->pivot->value]) ? $this->getPivotValueOptions()[$this->pivot->value] : $this->pivot->value;
+                default:
+                    return $this->pivot->value;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Virtual attribute used to output type in columns
+     * @return string
+     */
     public function getTypeTextAttribute()
     {
         return e(trans($this->getTypeOptions()[$this->type]));
     }
 
+    /**
+     * Attribute mutator for saving values to raw array from repeater
+     * @param $values
+     */
     public function setValuesRepeaterAttribute($values)
     {
         $array = [];
@@ -84,6 +114,10 @@ class Property extends Model
         $this->attributes['values_array'] = json_encode($array);
     }
 
+    /**
+     * Attribute accessor to convert raw values array to Repeater readable
+     * @return mixed
+     */
     public function getValuesRepeaterAttribute()
     {
         if (isset($this->attributes['values_array'])) {
@@ -101,6 +135,11 @@ class Property extends Model
         return $array;
     }
 
+    /**
+     * Accessor for retrieving json values
+     * @param $values
+     * @return mixed
+     */
     public function getValuesArrayAttribute($values)
     {
         $values = json_decode($values, true);
@@ -108,11 +147,19 @@ class Property extends Model
         return $values;
     }
 
+    /**
+     * Mutator for saving json values
+     * @param $values
+     */
     public function setValuesArrayAttribute($values)
     {
         $this->attributes['values_array'] = json_encode($values);
     }
 
+    /**
+     * @param $fields
+     * @param $context
+     */
     public function filterFields($fields, $context = null)
     {
         $pivotField = 'pivot[value]';

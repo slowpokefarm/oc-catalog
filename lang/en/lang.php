@@ -120,6 +120,10 @@ return [
         'dropdown_id' => 'Unique ID',
         'dropdown_value' => 'Value',
         'new' => 'New Property',
+        'activate_selected' => 'Activate selected',
+        'deactivate_selected' => 'Deactivate selected',
+        'activate_success' => 'Properties activated successfully',
+        'deactivate_success' => 'Properties deactivated successfully',
 
     ],
     'config' => [
